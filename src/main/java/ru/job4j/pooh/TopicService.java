@@ -16,10 +16,7 @@ public class TopicService implements Service {
             store.putIfAbsent(req.sourceName(), new ConcurrentHashMap<>());
             var queue = store.getOrDefault(req.sourceName(), new ConcurrentHashMap<>())
                     .putIfAbsent(req.param(), new ConcurrentLinkedQueue<>());
-            if (queue != null && !queue.isEmpty()) {
-                return new Resp(queue.poll(), STATUS_ON);
-            }
-            return new Resp("", STATUS_OFF);
+            return queue != null && !queue.isEmpty() ? new Resp(queue.poll(), STATUS_ON) : new Resp("", STATUS_OFF);
         }
         if ("POST".equals(req.httpRequestType())) {
             var queue = store.getOrDefault(req.sourceName(), new ConcurrentHashMap<>());

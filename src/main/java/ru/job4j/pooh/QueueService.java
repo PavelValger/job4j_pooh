@@ -18,10 +18,7 @@ public class QueueService implements Service {
         }
         if ("GET".equals(req.httpRequestType())) {
             String text = store.getOrDefault(req.sourceName(), new ConcurrentLinkedQueue<>()).poll();
-            if (text == null) {
-                return new Resp("", STATUS_OFF);
-            }
-            return new Resp(text, STATUS_ON);
+            return text == null ? new Resp("", STATUS_OFF) : new Resp(text, STATUS_ON);
         }
         return new Resp("", STATUS_OFF);
     }
